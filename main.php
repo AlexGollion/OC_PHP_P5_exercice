@@ -7,24 +7,42 @@
 
     while (true) {
 
-        $line = readline("Entrez votre commande : ");
+        $line = readline("Entrez votre commande : help, list, detail, create, delete, quit : ");
         echo "Vous avez saisi : $line\n";
 
+        // on va chercher quelle commande l'utilisateur à saisit
         switch ($line)
         {
             case 'list':
                 $command->list();
                 break;
             case (preg_match("#detail#", $line) ? true : false):
-                $command->detail(findId($line));
+                try {
+                    $command->detail(findId($line));
+                } catch (Exception $e) {
+                    echo $e->getMessage();
+                }
                 break;
             case (preg_match("#create#", $line) ? true : false):
-                $data = getInfoNewContact($line);
-                $command->create($data[0], $data[1], $data[2]);
+                try {
+                    $data = getInfoNewContact($line);
+                    $command->create($data[0], $data[1], $data[2]);
+                } catch (Exception $e) {
+                    echo $e->getMessage();
+                }
                 break;
             case (preg_match("#delete#", $line) ? true : false):
-                $command->delete(findId($line));
+                try {
+                    $command->delete(findId($line));
+                } catch (Exception $e) {
+                    echo $e->getMessage(); 
+                }
                 break;
+            case 'help':
+                $command->help();
+                break;
+            case 'quit':
+                exit();
             default:
                 echo "Commande inconnue\n";
                 break;

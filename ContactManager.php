@@ -8,12 +8,14 @@
         private DBConnect $bdd;
         private PDO $pdo;
         
+        // constructeur d'un contactManager
         public function __construct()
         {
             $this->bdd = new DBConnect();
             $this->pdo = $this->bdd->getPDO();
         }
 
+        // renvoie la liste de tous les contacts
         public function findAll(): array
         {
             $sqlQuerry = 'SELECT * FROM contact';
@@ -31,7 +33,8 @@
             return $contactList;
         }
 
-        public function findById($id)
+        // renvoie les informations du contact ayant l'id passé en paramètre
+        public function findById(int $id) : Contact
         {
             $sqlQuerry = 'SELECT * FROM contact WHERE id = :id';
             $contactStatement = $this->pdo->prepare($sqlQuerry);
@@ -50,7 +53,8 @@
             }
         }
 
-        public function createContact($name, $email, $phoneNumber)
+        // créer un nouveau contact avec les informations passé en paramètre
+        public function createContact(string $name, string $email, string $phoneNumber) : void
         {
             $sqlQuerry = 'INSERT INTO contact(name, email, phone_number) VALUES (:name, :email, :phone_number)';
             $contactStatement = $this->pdo->prepare($sqlQuerry);
@@ -61,7 +65,8 @@
             ]);       
         }
         
-        public function deleteContact($id)
+        // supprime le contact ayant l'id passé en paramètre
+        public function deleteContact(int $id) : void
         {
             $sqlQuerry = 'DELETE FROM contact WHERE id = :id';
             $contactStatement = $this->pdo->prepare($sqlQuerry);
